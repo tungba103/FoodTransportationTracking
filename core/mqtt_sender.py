@@ -7,6 +7,8 @@ MQTT_PORT_URL = 1883
 MQTT_TOPIC_TEMPERATURE = "topic/temperature"
 MQTT_TOPIC_HUMIDITY = "topic/humidity"
 
+current_temperature = random.uniform(20.0, 30.0)
+
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to MQTT Broker")
@@ -14,14 +16,16 @@ def on_connect(client, userdata, flags, rc):
         print(f"Failed to connect, return code {rc}")
 
 def publish_temperature(client, topic):
-    temperature = random.uniform(20.0, 30.0) 
-    client.publish(topic, str(temperature))
-    print(f"Temperature published: {temperature}")
+    global current_temperature
+    temperature_change = random.uniform(-0.5, 0.5)  # Giảm hoặc tăng một giá trị ngẫu nhiên
+    current_temperature += temperature_change
+    client.publish(topic, str(current_temperature))
+    print(f"Temperature published: {current_temperature:.2f}")
 
 def publish_humidity(client, topic):
     humidity = random.uniform(20.0, 30.0) 
     client.publish(topic, str(humidity))
-    print(f"Humidity published: {humidity}")
+    print(f"Humidity published: {humidity:.2f}")
 
 client = mqtt.Client("IoT Sender")
 client.on_connect = on_connect

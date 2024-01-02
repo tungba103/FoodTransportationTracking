@@ -1,7 +1,7 @@
 # from rest_framework.routers import DefaultRouter
 from django.urls import path
 
-from .views import TemperatureViewSet, CurrentTemperature
+from .views import TemperatureViewSet, CurrentTemperature, getListTemperatureByTransport
 
 # router = DefaultRouter()
 # router.register('temperature', TemperatureViewSet)
@@ -12,4 +12,5 @@ from .views import TemperatureViewSet, CurrentTemperature
 urlpatterns = [
     path('tensor-temperature', TemperatureViewSet.as_view({'get': 'list'}), name='temperature-list'),
     path('transport/current-temperature', CurrentTemperature.as_view(), name='current-temperature'),
+    path('transport/list-temperature', getListTemperatureByTransport.as_view(), name='list-temperature'),
 ]
