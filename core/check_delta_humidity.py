@@ -11,15 +11,15 @@ from transport.models import Transport
 while True:
     try:
         latest_humidity = Humidity.objects.latest('timestamp')
-        freezer = Transport.objects.latest('id')
-        print(latest_humidity.value, freezer.delta_humidity, freezer.default_humidity)
-        if latest_humidity.value - freezer.delta_humidity > freezer.default_humidity:
-            freezer.freezer_status = freezer.freezer_status + 1
-            print(f"Freezer status: {freezer.freezer_status}")
-        else :
-            freezer.freezer_status = freezer.freezer_status - 1
-            print(f"Freezer status: {freezer.freezer_status}")
-        freezer.save()
+        nebulizer = Transport.objects.latest('id')
+        print(latest_humidity.value, nebulizer.delta_humidity, nebulizer.default_humidity, nebulizer.nebulizer_status)
+        if latest_humidity.value > nebulizer.default_humidity and latest_humidity.value - nebulizer.default_humidity > nebulizer.delta_humidity and nebulizer.nebulizer_status == True:
+            nebulizer.nebulizer_status = False
+            print(f"nebulizer status: {nebulizer.nebulizer_status}")
+        elif latest_humidity.value < nebulizer.default_humidity and nebulizer.default_humidity - latest_humidity.value > nebulizer.delta_humidity and nebulizer.nebulizer_status == False :
+            nebulizer.nebulizer_status = True
+            print(f"nebulizer status: {nebulizer.nebulizer_status}")
+        nebulizer.save()
     except Humidity.DoesNotExist:
         pass
 
